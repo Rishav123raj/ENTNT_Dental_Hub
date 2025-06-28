@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { FileDown, CalendarClock, Stethoscope, FileText } from "lucide-react"
+import { CalendarClock, Stethoscope, FileText } from "lucide-react"
 
 export function PatientDashboardClient() {
   const { user, data } = useApp()
@@ -83,10 +83,10 @@ export function PatientDashboardClient() {
                                 {appt.files && appt.files.length > 0 && (
                                     <div>
                                         <strong>Files:</strong>
-                                        <ul className="list-disc pl-5">
+                                        <ul className="list-disc pl-5 mt-1 space-y-1">
                                             {appt.files.map(file => (
                                                 <li key={file.name}>
-                                                    <a href={file.url} download={file.name} className="text-primary hover:underline flex items-center gap-1">
+                                                    <a href={file.url} download={file.name} className="text-primary hover:underline flex items-center gap-1.5">
                                                        <FileText className="w-4 h-4" /> {file.name}
                                                     </a>
                                                 </li>

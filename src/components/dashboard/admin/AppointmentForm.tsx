@@ -55,6 +55,7 @@ export function AppointmentForm({ incident, onSuccess }: AppointmentFormProps) {
       appointmentDate: incident ? new Date(incident.appointmentDate) : new Date(),
       nextAppointmentDate: incident?.nextAppointmentDate ? new Date(incident.nextAppointmentDate) : undefined,
       cost: incident?.cost || undefined,
+      files: incident?.files || [],
     }
   });
 
@@ -173,7 +174,7 @@ export function AppointmentForm({ incident, onSuccess }: AppointmentFormProps) {
                         </div>
                     </FormControl>
                     <FormDescription>
-                        {attachedFiles.length > 0 && <ul>{attachedFiles.map(f => <li key={f.name} className="text-xs">{f.name}</li>)}</ul>}
+                        {attachedFiles.length > 0 && <ul className="mt-2 space-y-1">{attachedFiles.map(f => <li key={f.name} className="text-xs text-muted-foreground">{f.name}</li>)}</ul>}
                     </FormDescription>
                 </FormItem>
             </>

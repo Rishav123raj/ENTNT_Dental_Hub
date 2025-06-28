@@ -50,6 +50,7 @@ const getInitialData = (): AppData => ({
       comments: "Patient reports no issues.",
       appointmentDate: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString(),
       status: "Scheduled",
+      files: [],
     },
     {
       id: "i2",
@@ -72,6 +73,7 @@ const getInitialData = (): AppData => ({
       comments: "",
       appointmentDate: new Date(new Date().setDate(new Date().getDate() + 15)).toISOString(),
       status: "Scheduled",
+      files: [],
     },
      {
       id: "i4",
@@ -82,6 +84,7 @@ const getInitialData = (): AppData => ({
       appointmentDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
       cost: 300,
       status: "Scheduled",
+      files: [],
     },
   ],
 });
@@ -96,6 +99,12 @@ export const getData = (): AppData => {
       const parsedData = JSON.parse(data) as AppData;
       // Basic validation to ensure data structure is not completely off
       if(parsedData.users && parsedData.patients && parsedData.incidents) {
+         // Add files array if it's missing from old data
+        parsedData.incidents.forEach(incident => {
+            if (!incident.files) {
+                incident.files = [];
+            }
+        });
         return parsedData;
       }
     }
