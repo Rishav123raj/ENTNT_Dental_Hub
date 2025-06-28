@@ -60,11 +60,10 @@ export default function LandingPage() {
                 </div>
               </div>
               <Image
-                alt="Hero"
+                alt="Dental Center Management Dashboard"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-                data-ai-hint="dental clinic"
                 height="550"
-                src="https://placehold.co/550x550.png"
+                src="/dental-hub-dashboard.png"
                 width="550"
               />
             </div>
