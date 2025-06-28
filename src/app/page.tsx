@@ -63,8 +63,9 @@ export default function LandingPage() {
                 alt="Dental Center Management Dashboard"
                 className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
                 height="550"
-                src="/dental-hub-dashboard.png"
+                src="https://placehold.co/550x550.png"
                 width="550"
+                data-ai-hint="dental office"
               />
             </div>
           </div>
