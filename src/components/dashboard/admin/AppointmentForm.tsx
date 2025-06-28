@@ -23,7 +23,7 @@ import { useApp } from "@/hooks/use-app";
 import type { Incident, FileAttachment } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, FileUp, Sparkles } from "lucide-react";
+import { CalendarIcon, FileUp, Sparkles, X } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 
@@ -64,11 +64,16 @@ export function AppointmentForm({ incident, onSuccess }: AppointmentFormProps) {
     if (files) {
       const newFiles: FileAttachment[] = [];
       for (const file of Array.from(files)) {
+        if (attachedFiles.some(f => f.name === file.name)) continue;
         const base64 = await fileToBase64(file);
         newFiles.push({ name: file.name, type: file.type, size: file.size, url: base64 });
       }
       setAttachedFiles(prev => [...prev, ...newFiles]);
     }
+  };
+  
+  const handleRemoveFile = (fileName: string) => {
+    setAttachedFiles(prev => prev.filter(f => f.name !== fileName));
   };
 
   const getAiSuggestion = () => {
@@ -153,12 +158,13 @@ export function AppointmentForm({ incident, onSuccess }: AppointmentFormProps) {
          <FormField name="status" render={({ field }) => (<FormItem><FormLabel>Status</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select status" /></SelectTrigger></FormControl><SelectContent><SelectItem value="Scheduled">Scheduled</SelectItem><SelectItem value="Completed">Completed</SelectItem><SelectItem value="Cancelled">Cancelled</SelectItem></SelectContent></Select><FormMessage /></FormItem>)} />
 
         {form.watch('status') === 'Completed' && (
-            <>
+            <div className="space-y-4 pt-4 mt-4 border-t">
+                <h3 className="text-lg font-medium text-center text-muted-foreground">Post-Appointment Details</h3>
                 <div className="relative">
                     <FormField name="treatmentDescription" render={({ field }) => (<FormItem><FormLabel>Treatment Description</FormLabel><FormControl><Textarea placeholder="Details of the treatment provided" {...field} /></FormControl><FormMessage /></FormItem>)} />
                     <Button type="button" size="sm" variant="outline" className="absolute top-0 right-0 gap-1" onClick={getAiSuggestion}><Sparkles className="h-4 w-4 text-yellow-400" /> AI Suggestion</Button>
                 </div>
-                <FormField name="cost" render={({ field }) => (<FormItem><FormLabel>Cost ($)</FormLabel><FormControl><Input type="number" placeholder="e.g., 150" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                <FormField name="cost" render={({ field }) => (<FormItem><FormLabel>Cost ($)</FormLabel><FormControl><Input type="number" placeholder="e.g., 150" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} /></FormControl><FormMessage /></FormItem>)} />
                 <FormField name="nextAppointmentDate" render={({ field }) => (
                      <FormItem className="flex flex-col">
                         <FormLabel>Next Appointment Date</FormLabel>
@@ -170,14 +176,28 @@ export function AppointmentForm({ incident, onSuccess }: AppointmentFormProps) {
                     <FormLabel>Attach Files</FormLabel>
                      <FormControl>
                         <div className="flex items-center gap-2">
-                         <label className="flex-1 cursor-pointer"><Input type="file" multiple onChange={handleFileChange} className="hidden" /><Button asChild variant="outline" className="w-full"><div className="gap-2 flex items-center"><FileUp className="h-4 w-4"/>Upload Files</div></Button></label>
+                         <label className="flex-1 cursor-pointer"><Input type="file" multiple onChange={handleFileChange} className="hidden" /><Button type="button" asChild variant="outline" className="w-full"><div className="gap-2 flex items-center"><FileUp className="h-4 w-4"/>Upload Files</div></Button></label>
                         </div>
                     </FormControl>
-                    <FormDescription>
-                        {attachedFiles.length > 0 && <ul className="mt-2 space-y-1">{attachedFiles.map(f => <li key={f.name} className="text-xs text-muted-foreground">{f.name}</li>)}</ul>}
-                    </FormDescription>
+                   {attachedFiles.length > 0 && (
+                        <FormDescription>
+                            <div className="mt-2 space-y-2">
+                                <h4 className="text-sm font-medium">Attached Files:</h4>
+                                <ul className="space-y-1">
+                                    {attachedFiles.map((f) => (
+                                    <li key={f.name} className="text-xs text-muted-foreground flex items-center justify-between p-1.5 bg-muted rounded-md">
+                                        <span className="truncate pr-2">{f.name} ({(f.size / 1024).toFixed(2)} KB)</span>
+                                        <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={() => handleRemoveFile(f.name)}>
+                                        <X className="h-3 w-3" />
+                                        </Button>
+                                    </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </FormDescription>
+                    )}
                 </FormItem>
-            </>
+            </div>
         )}
         <div className="flex justify-end">
           <Button type="submit">{incident ? "Update Appointment" : "Create Appointment"}</Button>
