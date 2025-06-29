@@ -94,7 +94,7 @@ export function DashboardClient() {
         </Card>
       </div>
 
-       <div className="grid gap-4 md:grid-cols-2">
+       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
         <Card>
             <CardHeader>
                 <CardTitle>Next 10 Appointments</CardTitle>
@@ -104,7 +104,7 @@ export function DashboardClient() {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Patient</TableHead>
-                            <TableHead>Treatment</TableHead>
+                            <TableHead className="hidden sm:table-cell">Treatment</TableHead>
                             <TableHead>Date & Time</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -112,7 +112,7 @@ export function DashboardClient() {
                         {stats.next10Appointments.map(appt => (
                             <TableRow key={appt.id}>
                                 <TableCell>{getPatientName(appt.patientId)}</TableCell>
-                                <TableCell>{appt.title}</TableCell>
+                                <TableCell className="hidden sm:table-cell">{appt.title}</TableCell>
                                 <TableCell>{format(parseISO(appt.appointmentDate), 'PPp')}</TableCell>
                             </TableRow>
                         ))}
@@ -132,7 +132,7 @@ export function DashboardClient() {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="value" fill="var(--color-primary)" name="Treatments" />
+                        <Bar dataKey="value" fill="hsl(var(--primary))" name="Treatments" />
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>

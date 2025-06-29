@@ -41,12 +41,12 @@ export function PatientDashboardClient() {
             {upcoming.length > 0 ? (
                 <div className="space-y-4">
                     {upcoming.map(appt => (
-                        <div key={appt.id} className="p-4 border rounded-lg flex items-center justify-between">
-                            <div>
+                        <div key={appt.id} className="p-4 border rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div className="flex-grow">
                                 <h3 className="font-semibold">{appt.title}</h3>
                                 <p className="text-sm text-muted-foreground">{appt.description}</p>
                             </div>
-                            <div className="text-right">
+                            <div className="text-left sm:text-right w-full sm:w-auto shrink-0">
                                 <p className="font-medium flex items-center gap-2"><CalendarClock className="h-4 w-4" /> {format(parseISO(appt.appointmentDate), 'PPp')}</p>
                                 <Badge variant="outline">{appt.status}</Badge>
                             </div>
@@ -70,15 +70,15 @@ export function PatientDashboardClient() {
                 {history.map(appt => (
                     <AccordionItem value={appt.id} key={appt.id}>
                         <AccordionTrigger>
-                            <div className="flex justify-between w-full pr-4">
-                                <span>{appt.title}</span>
-                                <span className="text-muted-foreground">{format(parseISO(appt.appointmentDate), 'PPP')}</span>
+                            <div className="flex justify-between w-full pr-4 text-left">
+                                <span className="flex-1 font-semibold">{appt.title}</span>
+                                <span className="text-muted-foreground shrink-0 ml-4">{format(parseISO(appt.appointmentDate), 'PPP')}</span>
                             </div>
                         </AccordionTrigger>
                         <AccordionContent>
                            <div className="space-y-2 pl-2">
                                 <p className="flex items-center gap-2"><Stethoscope className="w-4 h-4 text-primary"/><strong>Treatment:</strong> {appt.treatmentDescription || "N/A"}</p>
-                                <p><Badge variant={appt.status === 'Completed' ? 'default' : 'destructive'} className="bg-accent">{appt.status}</Badge></p>
+                                <p><Badge variant={appt.status === 'Completed' ? 'secondary' : 'destructive'} className={appt.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-accent'}>{appt.status}</Badge></p>
                                 {appt.cost && <p><strong>Cost:</strong> ${appt.cost.toLocaleString()}</p>}
                                 {appt.files && appt.files.length > 0 && (
                                     <div>

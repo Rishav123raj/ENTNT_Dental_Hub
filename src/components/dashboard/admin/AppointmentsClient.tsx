@@ -70,16 +70,16 @@ export function AppointmentsClient() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-start">
-            <div>
+        <div className="flex justify-between items-start gap-4">
+            <div className="flex-1">
                 <CardTitle>Appointments</CardTitle>
                 <CardDescription>Manage all patient appointments.</CardDescription>
             </div>
              <Dialog open={isFormOpen} onOpenChange={setFormOpen}>
                 <DialogTrigger asChild>
-                    <Button size="sm" className="gap-1" onClick={handleAddNew}>
-                        <PlusCircle className="h-4 w-4" />
-                        New Appointment
+                    <Button size="sm" className="gap-1">
+                        <PlusCircle className="h-3.5 w-3.5" />
+                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">New Appointment</span>
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-lg">
@@ -96,7 +96,7 @@ export function AppointmentsClient() {
           <TableHeader>
             <TableRow>
               <TableHead>Patient</TableHead>
-              <TableHead>Title</TableHead>
+              <TableHead className="hidden md:table-cell">Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>
@@ -108,8 +108,8 @@ export function AppointmentsClient() {
             {data.incidents.map((incident) => (
               <TableRow key={incident.id}>
                 <TableCell className="font-medium">{getPatientName(incident.patientId)}</TableCell>
-                <TableCell>{incident.title}</TableCell>
-                <TableCell>{format(parseISO(incident.appointmentDate), "PPp")}</TableCell>
+                <TableCell className="hidden md:table-cell">{incident.title}</TableCell>
+                <TableCell>{format(parseISO(incident.appointmentDate), "PP")}</TableCell>
                 <TableCell><Badge variant={incident.status === 'Completed' ? 'secondary' : 'default'} className={incident.status === 'Completed' ? 'bg-green-100 text-green-800' : incident.status === 'Cancelled' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}>{incident.status}</Badge></TableCell>
                 <TableCell>
                   <AlertDialog>
